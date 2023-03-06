@@ -1,1 +1,90 @@
-Here will lie the relay's home page
+<header class="container mx-auto py-16">
+  <h1 class="text-4xl font-bold text-gray-100">NOSTR Relay</h1>
+  <p class="text-xl font-medium text-gray-600">brought to you by <a href="https://codl.co" class="text-orange-500 hover:text-brand-700">CODL.CO</a></p>
+</header>
+
+<main class="w-full mx-auto pt-4">
+  <div class="w-full max-w-sm mx-auto">
+    <div class="bg-brand-500 p-8 rounded-lg shadow-lg">
+      <h2 class="text-2xl font-bold text-white">Let's get started!</h2>
+      <p class="text-lg font-medium mt-4 text-white">To connect to the Relay, add this server to your favorite NOSTR APP:</p>
+      <pre class="mt-4 pt-4 rounded bg-brand-600"><code id="code-to-copy" class="text-lg cursor-pointer text-white text-center">wss://relay.codl.co<span id="copy-relay" class="bg-brand-400 text-white rounded-full flex items-center justify-center " style="display: none;">Relay, <strong>Copied!</strong></span></code>
+      <span class="text-xs text-orange-300">(Click to copy)</span>
+      </pre>
+    </div>
+  </div>
+</main>
+
+<footer class="fixed bottom-0 w-full text-center py-4">
+  <div class="container mx-auto px-8">
+    <div class="text-gray-400">Powered by <a href="https://github.com/RooSoft/relay"><strong class="text-orange-500 hover:text-brand-700">RooSoft</strong></a></div>
+    <div class="text-gray-400">Please consider sending some sats to help further development!</div>
+    <div class="text-brand-500 p-2 rounded-lg">
+      <code id="btc-to-copy" class="text-xs cursor-pointer text-orange-500">bc1q8al05lvezmu3a7ce424ng3nvya0ynzhenxrw9p<span id="copy-address" class="bg-brand-400 text-white rounded-full flex items-center justify-center" style="display: none;">Address, <strong>Copied!</strong></span></code>
+    </div>
+  </div>
+</footer>
+
+
+
+
+<script>
+  const codeToCopy = document.querySelector("#code-to-copy");
+  const btcToCopy = document.querySelector("#btc-to-copy");
+  const relayMessage = document.querySelector("#copy-relay");
+  const addressMessage = document.querySelector("#copy-address");
+
+  codeToCopy.addEventListener("click", () => {
+    navigator.clipboard.writeText(codeToCopy.innerText.trim()).then(() => {
+      relayMessage.style.display = "flex";
+      setTimeout(() => {
+        relayMessage.style.display = "none";
+      }, 2000);
+    });
+  });
+
+  btcToCopy.addEventListener("click", () => {
+    navigator.clipboard.writeText(btcToCopy.innerText.trim()).then(() => {
+      addressMessage.style.display = "flex";
+      setTimeout(() => {
+        addressMessage.style.display = "none";
+      }, 2000);
+    });
+  });
+</script>
+
+
+<script>
+  let colorChangeEnabled = window.innerWidth > 576;
+  let previousColor = "";
+
+  document.addEventListener("mousemove", function(event) {
+    if (!colorChangeEnabled) {
+      return;
+    }
+
+    const x = event.clientX;
+    const y = event.clientY;
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+    const color = `hsl(${(x / width) * 180}, ${(y / height) * 20}%, ${(x / width) * 30}%)`;
+    document.body.style.backgroundColor = color;
+  });
+
+  document.querySelector("main").addEventListener("click", function() {
+    colorChangeEnabled = false;
+    previousColor = document.body.style.backgroundColor;
+  });
+
+  document.querySelector("footer").addEventListener("click", function() {
+    colorChangeEnabled = false;
+    previousColor = document.body.style.backgroundColor;
+  });
+
+  document.addEventListener("click", function(event) {
+    if (event.target.tagName !== "MAIN" && event.target.tagName !== "FOOTER") {
+      colorChangeEnabled = true;
+      document.body.style.backgroundColor = previousColor;
+    }
+  });
+</script>
