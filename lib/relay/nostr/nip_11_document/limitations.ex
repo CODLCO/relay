@@ -1,4 +1,4 @@
-defmodule Relay.Nostr.Connection.Nip11Document.Limitations do
+defmodule Relay.Nostr.Nip11Document.Limitations do
   defstruct [
     :max_message_length,
     :max_subscriptions,
@@ -16,18 +16,32 @@ defmodule Relay.Nostr.Connection.Nip11Document.Limitations do
   # auth_required
   # payment_required
 
-  alias Relay.Nostr.Connection.Nip11Document.Limitations
+  alias Relay.Nostr.Nip11Document.Limitations
 
   @type t :: %Limitations{}
 
   @nip11 Application.compile_env(:relay, :nip_11_document, [])
 
+  # This thing is needed so that the Jason library knows how to serialize the events
+  defimpl Jason.Encoder do
+    def encode(
+          %Limitations{} = limitations,
+          opts
+        ) do
+      limitations
+      |> Map.from_struct()
+      |> Enum.filter(&(&1 != nil))
+      |> Enum.into(%{})
+      |> Jason.Encode.map(opts)
+    end
+  end
+
   @doc """
   Returns a struct containing the relay's limitations as from in the config files
 
   ## Examples
-      iex> Relay.Nostr.Connection.Nip11Document.Limitations.get()
-      %Relay.Nostr.Connection.Nip11Document.Limitations{
+      iex> Relay.Nostr.Nip11Document.Limitations.get()
+      %Relay.Nostr.Nip11Document.Limitations{
         max_message_length: 1000,
         max_subscriptions: 2,
         max_filters: 2,
